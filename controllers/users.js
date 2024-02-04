@@ -3,7 +3,14 @@ const User = require("../models/user");
 const BadRequestError = require("../utils/errors/badRequestError");
 const NotFoundError = require("../utils/errors/notFoundError");
 
-const getCurrentUser = (req, res, next) => {
+// returns all users
+const getUsers = (req, res, next) => {
+  const { name, avatar } = req.body;
+  const { _id } = req.user;
+};
+
+// returns a user by _id
+const getUser = (req, res, next) => {
   const { _id } = req.user;
 
   User.findById({ _id })
@@ -23,7 +30,8 @@ const getCurrentUser = (req, res, next) => {
     });
 };
 
-const updateUser = (req, res, next) => {
+// creates a new user
+const newUser = (req, res, next) => {
   const { name, avatar } = req.body;
   const { _id } = req.user;
   User.findByIdAndUpdate(
@@ -44,6 +52,6 @@ const updateUser = (req, res, next) => {
 };
 
 module.exports = {
-  getCurrentUser,
-  updateUser,
+  getUser,
+  newUser,
 };
