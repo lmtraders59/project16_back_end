@@ -1,12 +1,13 @@
 const router = require("express").Router();
 
-const { getUsers, createUser } = require("../controllers/users");
+const { get } = require("mongoose");
+const { getUsers, createUser, getUser } = require("../controllers/users");
 
 // GET /users — returns all users
 router.get("/", getUsers);
 
 // GET /users/:userId - returns a user by _id
-router.get("/:userId", () => console.log("GET users by ID"));
+router.get("/:userId", getUser);
 
 // POST /users — creates a new user
 router.post("/", createUser);

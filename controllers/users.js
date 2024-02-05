@@ -26,6 +26,21 @@ const createUser = (req, res) => {
       return res.status(500).send({ message: err.message });
     });
 };
+
+const getUser = (req, res) => {
+  const { userId } = req.params;
+  User.findById(userId)
+    .orFail()
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
+      console.log(err);
+      if (err.name === "DocumentNotFoundError") {
+        // return res.status().send({ message: err.message });
+      }
+      return res.status(500).send({ message: err.message });
+    });
+};
+
 // returns a user by _id
 // const getUser = (req, res, next) => {
 //   const { _id } = req.user;
@@ -71,4 +86,5 @@ const createUser = (req, res) => {
 module.exports = {
   getUsers,
   createUser,
+  getUser,
 };
