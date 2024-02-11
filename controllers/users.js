@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
-// const BadRequestError = require("../utils/errors/badRequestError");
-// const NotFoundError = require("../utils/errors/notFoundError");
+const BadRequestError = require("../utils/errors/badRequestError");
+const NotFoundError = require("../utils/errors/notFoundError");
 
 // GET users returns all users
 const getUsers = (req, res) => {
@@ -13,6 +13,7 @@ const getUsers = (req, res) => {
     });
 };
 
+// POST /users
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
 
@@ -21,9 +22,10 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
+        res.status(BadRequestError).send({ message: err.message });
+      } else {
+        res.status(500).send({ message: err.message });
       }
-      return res.status(500).send({ message: err.message });
     });
 };
 
@@ -35,32 +37,14 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "DocumentNotFoundError") {
-        // return res.status().send({ message: err.message });
+        return res.status(NotFoundError).send({ message: err.message });
+      }
+      if (err.name === "CastError") {
+        return res.status(BadRequestError).send({ message: "err.message" });
       }
       return res.status(500).send({ message: err.message });
     });
 };
-
-// returns a user by _id
-// const getUser = (req, res, next) => {
-//   const { _id } = req.user;
-
-//   User.findById({ _id })
-//     .then((user) => {
-//       if (!user) {
-//         next(new NotFoundError("User not found"));
-//       } else {
-//         res.send(user);
-//       }
-//     })
-//     .catch((err) => {
-//       if (err.name === "CastError") {
-//         next(new BadRequestError("Bad request, invalid ID"));
-//       } else {
-//         next(err);
-//       }
-//     });
-// };
 
 // creates a new user
 // const newUser = (req, res, next) => {
