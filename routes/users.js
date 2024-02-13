@@ -11,5 +11,7 @@ router.get("/:userId", getUser);
 
 // POST /users — creates a new user
 router.post("/", createUser);
+router.put("/:itemId/likes", likeItem);
+router.delete("/:itemId/likes", dislikeItem);
 
 module.exports = router;

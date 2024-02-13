@@ -1,4 +1,10 @@
 const ClothingItem = require("../models/clothingItem");
+const BadRequestError = require("../utils/errors/badRequestError");
+
+const badRequestError = new BadRequestError();
+const NotFoundError = require("../utils/errors/notFoundError");
+
+const notFoundError = new NotFoundError();
 
 const createItem = (req, res) => {
   console.log(req);
@@ -48,9 +54,61 @@ const daleteItem = (req, res) => {
     });
 };
 
+// Like an item
+
+const likeItem = (req, res) => {
+  ClothingItem.findByIdAndUpdate(
+    req.params.itemId,
+    { $addToSet: { likes: req.user.id } },
+    { new: true },
+  )
+    .then((item) => {
+      if (!item) {
+        res.status(notFoundError.statusCode).send({ message: "err.message" });
+      } else {
+        res.send({ data: item });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "CastError") {
+        res.status(badRequestError.statusCode).send({ message: err.message });
+      } else {
+        res.status(500).send({ message: err.message });
+      }
+    });
+};
+
+// Unlike an item
+
+const dislikeItem = (req, res) => {
+  ClothingItem.findByIdAndUpdate(
+    req.params.itemId,
+    { $pull: { likes: req.user.id } },
+    { new: true },
+  )
+    .then((item) => {
+      if (!item) {
+        res.status(badRequestError.statusCode).send({ message: "err.message" });
+      } else {
+        res.send({ data: item });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "CastError") {
+        return res
+          .status(badRequestError.statusCode)
+          .send({ message: "Bad request, invalid data ID" });
+      } 
+      //   res.status(500).send({ message: err.message });
+      // }
+    });
+};
+
 module.exports = {
   createItem,
   getItems,
   updateItem,
   daleteItem,
+  likeItem,
+  dislikeItem,
 };
