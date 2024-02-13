@@ -98,7 +98,7 @@ const dislikeItem = (req, res) => {
         return res
           .status(badRequestError.statusCode)
           .send({ message: "Bad request, invalid data ID" });
-      } 
+      }
       //   res.status(500).send({ message: err.message });
       // }
     });
