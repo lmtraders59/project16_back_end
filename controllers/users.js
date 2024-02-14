@@ -12,7 +12,7 @@ const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return res.status(500).send({ message: err.message });
     });
 };
@@ -24,7 +24,7 @@ const createUser = (req, res) => {
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "ValidationError") {
         res.status(badRequestError.statusCode).send({ message: err.message });
       } else {
@@ -39,7 +39,7 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(notFoundError.statusCode)

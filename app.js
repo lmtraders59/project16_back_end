@@ -5,6 +5,13 @@ const mainRouter = require("./routes/index");
 const app = express();
 const { PORT = 3001 } = process.env;
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133", // paste the _id of the test user created in the previous step
+  };
+  next();
+});
+
 app.use(express.json());
 app.use("/", mainRouter);
 
@@ -19,11 +26,4 @@ mongoose.connect(
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
   console.log("This is working");
-});
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: "5d8b8592978f8bd833ca8133", // paste the _id of the test user created in the previous step
-  };
-  next();
 });

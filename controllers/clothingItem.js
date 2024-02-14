@@ -10,9 +10,14 @@ const createItem = (req, res) => {
   console.log(req);
   console.log(req.body);
 
-  const { name, weather, imageURL } = req.body;
+  const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageURL })
+  ClothingItem.create({
+    name,
+    weather,
+    imageUrl,
+    owner: req.user.id,
+  })
     .then((item) => {
       console.log(item);
       res.send({ data: item });
