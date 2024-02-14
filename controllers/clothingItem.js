@@ -7,16 +7,14 @@ const NotFoundError = require("../utils/errors/notFoundError");
 const notFoundError = new NotFoundError();
 
 const createItem = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({
     name,
     weather,
     imageUrl,
-    owner: req.user.id,
+    // eslint-disable-next-line no-underscore-dangle
+    owner: req.user._id,
   })
     .then((item) => {
       console.log(item);

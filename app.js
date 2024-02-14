@@ -3,16 +3,17 @@ const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
 
 const app = express();
-const { PORT = 3001 } = process.env;
 
+const { PORT = 3001 } = process.env;
+app.use(express.json());
 app.use((req, res, next) => {
   req.user = {
     _id: "5d8b8592978f8bd833ca8133", // paste the _id of the test user created in the previous step
   };
+  console.log(req);
   next();
 });
 
-app.use(express.json());
 app.use("/", mainRouter);
 
 mongoose.connect(
