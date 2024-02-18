@@ -6,6 +6,8 @@ const NotFoundError = require("../utils/errors/notFoundError");
 
 const notFoundError = new NotFoundError();
 
+// create a new item
+
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
@@ -20,10 +22,17 @@ const createItem = (req, res) => {
       console.log(item);
       res.send({ data: item });
     })
-    .catch((e) => {
-      res.status(500).send({ message: "Error from createItem", e });
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "ValidationError") {
+        res.status(badRequestError.statusCode).send({ message: err.message });
+      } else {
+        res.status(500).send({ message: err.message });
+      }
     });
 };
+
+// return all clothing items
 
 const getItems = (req, res) => {
   ClothingItem.find({})
@@ -33,6 +42,8 @@ const getItems = (req, res) => {
     });
 };
 
+// Update a item
+
 const updateItem = (req, res) => {
   const { itemId } = req.params;
   const { imageURL } = req.body;
@@ -40,10 +51,17 @@ const updateItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageURL } })
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from updateItem", e });
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "ValidationError") {
+        res.status(badRequestError.statusCode).send({ message: err.message });
+      } else {
+        res.status(500).send({ message: err.message });
+      }
     });
 };
+
+// delete an item by id
 
 const daleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -51,11 +69,18 @@ const daleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(204).send({}))
-    .catch((e) => {
-      res.status(500).send({ message: "Error from deleteItem", e });
+    .then((item) => res.status(204).send({ data: item }))
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "NotFoundError") {
+        res.status(notFoundError.statusCode).send({ message: err.message });
+      } else {
+        res.status(500).send({ message: "Error from deleteItem", e });
+      }
     });
 };
+
+
 
 // Like an item
 
@@ -81,7 +106,7 @@ const likeItem = (req, res) => {
     });
 };
 
-// Unlike an item
+// Dislike an item
 
 const dislikeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
