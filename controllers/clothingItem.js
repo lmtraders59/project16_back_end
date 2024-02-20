@@ -25,7 +25,7 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        res.status(badRequestError.statusCode).send({ message: err.message });
+        res.status(badRequestError.statusCode).send({ message: "Bad request, invalid data" });
       } else {
         res.status(500).send({ message: err.message });
       }
@@ -69,41 +69,21 @@ const daleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(200).send({ message: "Successfully deleted" }))
+    .then(() => res.status(200).send({ message: "Successfully deleted" }))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        res.status(notFoundError.statusCode).send({ message: err.message });
+        res.status(notFoundError.statusCode).send({ message: "Item not found" });
       } else {
+        if (err.name === "CastError") {
+          res
+            .status(badRequestError.statusCode)
+            .send({ message: "Invalid item ID" });
+        }
         res.status(500).send({ message: "Error from deleteItem" });
       }
     });
 };
-
-// const deleteItem = (req, res, next) => {
-//   ClothingItem.findById(req.params.itemId)
-//     .then((item) => {
-//       if (!item) {
-//         next(new NotFoundError("Item not found"));
-//         return;
-//       }
-//       if (item.owner.equals(req.user._id)) {
-//         item
-//           .deleteOne()
-//           .then(() => res.send({ ClothingItem: item }))
-//           .catch(next);
-//       } else {
-//         next(new ForbiddenError("You are not authorized to delete this item"));
-//       }
-//     })
-//     .catch((err) => {
-//       if (err.name === "CastError") {
-//         next(new BadRequestError("Invalid item ID"));
-//       } else {
-//         next(err);
-//       }
-//     });
-// };
 
 // Like an item
 
@@ -115,14 +95,18 @@ const likeItem = (req, res) => {
   )
     .then((item) => {
       if (!item) {
-        res.status(notFoundError.statusCode).send({ message: "err.message" });
+        res
+          .status(notFoundError.statusCode)
+          .send({ message: "Item not found" });
       } else {
         res.send({ data: item });
       }
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(badRequestError.statusCode).send({ message: err.message });
+        res
+          .status(badRequestError.statusCode)
+          .send({ message: "Invalid item ID" });
       } else {
         res.status(500).send({ message: err.message });
       }
@@ -139,7 +123,9 @@ const dislikeItem = (req, res) => {
   )
     .then((item) => {
       if (!item) {
-        res.status(badRequestError.statusCode).send({ message: "err.message" });
+        res
+          .status(notFoundError.statusCode)
+          .send({ message: "Item not found" });
       } else {
         res.send({ data: item });
       }
