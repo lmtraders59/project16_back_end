@@ -25,7 +25,9 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        res.status(badRequestError.statusCode).send({ message: "Bad request, invalid data" });
+        res
+          .status(badRequestError.statusCode)
+          .send({ message: "Bad request, invalid data" });
       } else {
         res.status(500).send({ message: err.message });
       }
@@ -73,13 +75,14 @@ const daleteItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        res.status(notFoundError.statusCode).send({ message: "Item not found" });
+        res
+          .status(notFoundError.statusCode)
+          .send({ message: "Item not found" });
+      } else if (err.name === "CastError") {
+        res
+          .status(badRequestError.statusCode)
+          .send({ message: "Invalid item ID" });
       } else {
-        if (err.name === "CastError") {
-          res
-            .status(badRequestError.statusCode)
-            .send({ message: "Invalid item ID" });
-        }
         res.status(500).send({ message: "Error from deleteItem" });
       }
     });
