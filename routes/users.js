@@ -1,8 +1,5 @@
 const router = require("express").Router();
 
-// const { get } = require("mongoose");
-// const mongoose = require("mongoose");
-
 const { getUsers, createUser, getUser } = require("../controllers/users");
 
 // GET /users — returns all users

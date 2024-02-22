@@ -44,25 +44,6 @@ const getItems = (req, res) => {
     });
 };
 
-// Update a item
-
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageURL } = req.body;
-
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageURL } })
-    .orFail()
-    .then((item) => res.status(200).send({ data: item }))
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        res.status(badRequestError.statusCode).send({ message: err.message });
-      } else {
-        res.status(500).send({ message: err.message });
-      }
-    });
-};
-
 // delete an item by id
 
 const daleteItem = (req, res) => {
@@ -147,7 +128,6 @@ const dislikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  updateItem,
   daleteItem,
   likeItem,
   dislikeItem,
