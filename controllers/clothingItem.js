@@ -5,6 +5,9 @@ const badRequestError = new BadRequestError();
 const NotFoundError = require("../utils/errors/notFoundError");
 
 const notFoundError = new NotFoundError();
+const ServerError = require("../utils/errors/serverError");
+
+const serverError = new ServerError();
 
 // create a new item
 
@@ -15,7 +18,6 @@ const createItem = (req, res) => {
     name,
     weather,
     imageUrl,
-    // eslint-disable-next-line no-underscore-dangle
     owner: req.user._id,
   })
     .then((item) => {
@@ -27,9 +29,10 @@ const createItem = (req, res) => {
       if (err.name === "ValidationError") {
         res
           .status(badRequestError.statusCode)
-          .send({ message: "Bad request, invalid data" });
+          .send({ message: "Invalid data" });
       } else {
-        res.status(500).send({ message: err.message });
+        res
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -40,7 +43,9 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch((e) => {
-      res.status(500).send({ message: "Error from Get Items", e });
+      res
+        .status(serverError)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -62,9 +67,11 @@ const daleteItem = (req, res) => {
       } else if (err.name === "CastError") {
         res
           .status(badRequestError.statusCode)
-          .send({ message: "Invalid item ID" });
+          .send({ message: "Invalid data" });
       } else {
-        res.status(500).send({ message: "Error from deleteItem" });
+        res
+          .status(serverError)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -74,7 +81,7 @@ const daleteItem = (req, res) => {
 const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
-    { $addToSet: { likes: req.user.id } },
+    { $addToSet: { likes: req.user._id } },
     { new: true },
   )
     .then((item) => {
@@ -90,9 +97,11 @@ const likeItem = (req, res) => {
       if (err.name === "CastError") {
         res
           .status(badRequestError.statusCode)
-          .send({ message: "Invalid item ID" });
+          .send({ message: "Invalid data" });
       } else {
-        res.status(500).send({ message: err.message });
+        res
+          .status(serverError)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -102,7 +111,7 @@ const likeItem = (req, res) => {
 const dislikeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
-    { $pull: { likes: req.user.id } },
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .then((item) => {
@@ -118,9 +127,11 @@ const dislikeItem = (req, res) => {
       if (err.name === "CastError") {
         res
           .status(badRequestError.statusCode)
-          .send({ message: "Bad request, invalid data ID" });
+          .send({ message: "Invalid data" });
       } else {
-        res.status(500).send({ message: err.message });
+        res
+          .status(serverError)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };

@@ -6,6 +6,9 @@ const badRequestError = new BadRequestError();
 const NotFoundError = require("../utils/errors/notFoundError");
 
 const notFoundError = new NotFoundError();
+const ServerError = require("../utils/errors/serverError");
+
+const serverError = new ServerError();
 
 // GET users returns all users
 const getUsers = (req, res) => {
@@ -13,8 +16,9 @@ const getUsers = (req, res) => {
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: err.message });
-      
+      return res
+        .status(serverError)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -27,9 +31,13 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        res.status(badRequestError.statusCode).send({ message: err.message });
+        res
+          .status(badRequestError.statusCode)
+          .send({ message: "Invalid data" });
       } else {
-        res.status(500).send({ message: err.message });
+        res
+          .status(serverError)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -49,9 +57,11 @@ const getUser = (req, res) => {
       if (err.name === "CastError") {
         return res
           .status(badRequestError.statusCode)
-          .send({ message: "err.message" });
+          .send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: err.message });
+      return res
+        .status(serverError)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 

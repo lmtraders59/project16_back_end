@@ -7,6 +7,6 @@ module.exports = {
   // update the extends and rules
   extends: ["eslint:recommended", "airbnb-base", "prettier"],
   rules: {
-    "no-underscore-dangle": ["error", { allow: ["foo_", "_bar"] }],
+    "no-underscore-dangle": ["error", { allow: ["_id"] }],
   },
 };
