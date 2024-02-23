@@ -31,8 +31,7 @@ const createItem = (req, res) => {
           .status(badRequestError.statusCode)
           .send({ message: "Invalid data" });
       } else {
-        res
-          .send({ message: "An error has occurred on the server" });
+        res.send({ message: "An error has occurred on the server" });
       }
     });
 };
