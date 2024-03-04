@@ -35,21 +35,58 @@ const getUsers = (req, res) => {
 
 // create new user
 
+// const createUser = (req, res, next) => {
+//   const { name, avatar, email, password } = req.body;
+
+//   User.create({ name, avatar })
+//    return bcrypt
+//     .hash(password, 10)
+//     .then(hash) => {
+//       User.create({
+//         name,
+//         avatar,
+//         email,
+//         password: hash,
+//       })
+//     .then((user) => res.status(201).send(user))
+//     .catch((err) => {
+//       if (err.code === 11000) {
+//         next(new ConflictError("A user with the current email already exists"));
+//       }
+//       console.error(err);
+//       if (err.name === "ValidationError") {
+//         res
+//           .status(badRequestError.statusCode)
+//           .send({ message: "Invalid data" });
+//       } else {
+//         res
+//           .status(serverError)
+//           .send({ message: "An error has occurred on the server" });
+//       }
+//     });
+// };
+
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
- 
-  User.create({ name, avatar })
-   return bcrypt
-    .hash(password, 10)
+
+  User.findOne({ email })
+    .then((user) => {
+      console.log({ user });
+      return bcrypt.hash(password, 10);
+    })
     .then((hash) => {
+      // create the user
       User.create({
         name,
         avatar,
         email,
         password: hash,
-      })
+      });
+    })
     .then((user) => res.status(201).send(user))
+    // .then((user) => console.log("send response if successful"))
     .catch((err) => {
+      console.error(err);
       if (err.code === 11000) {
         next(new ConflictError("A user with the current email already exists"));
       }
