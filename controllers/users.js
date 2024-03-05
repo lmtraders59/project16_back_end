@@ -70,6 +70,7 @@ const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   User.findOne({ email })
+    .select("+password")
     .then((user) => {
       console.log({ user });
       return bcrypt.hash(password, 10);
