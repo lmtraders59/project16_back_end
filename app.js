@@ -2,22 +2,25 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const { login, createUser } = require("./controllers/users");
 
 const app = express();
-
+// app.use(express.json())
 const { PORT = 3001 } = process.env;
 app.use(express.json());
 // app.use((req, res, next) => {
 //   req.user = {
-//     _id: "5d8b8592978f8bd833ca8133", 
+//     _id: "5d8b8592978f8bd833ca8133",
 //   };
 //   console.log(req);
 //   next();
 // });
 
 app.use("/", mainRouter);
-// app.post("/signin", loginValidation, login);
-// app.post("/signup", createUserValidation, createUser);
+
+app.post("/signin", loginValidation, login);
+app.post("/signup", createUserValidation, createUser);
+
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
   (r) => {
