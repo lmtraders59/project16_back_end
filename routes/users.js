@@ -13,8 +13,8 @@ router.get("/:userId", getUser);
 // POST /users — creates a new user
 router.post("/", createUser);
 
-// router.get("/", auth, getCurrentUser);
+// router.get("/me", auth, getCurrentUser);
 
-// router.patch("/", auth, updateUser);
+// router.patch("/me", auth, updateUser);
 
 module.exports = router;
