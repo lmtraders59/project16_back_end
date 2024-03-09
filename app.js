@@ -1,15 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const { errors } = require("celebrate");
 const mainRouter = require("./routes/index");
 const { login, createUser } = require("./controllers/users");
-const errorHandler = require("./middlewares/errorHandler");
-const {
-  createUserValidation,
-  loginValidation,
-} = require("./middlewares/validation");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
 
@@ -22,13 +15,10 @@ app.use(express.json());
 //   console.log(req);
 //   next();
 // });
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 app.use("/", mainRouter);
-app.use(errors());
-app.use(requestLogger);
-
-app.post("/signin", loginValidation, login);
-app.post("/signup", createUserValidation, createUser);
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
@@ -37,10 +27,6 @@ mongoose.connect(
   },
   (e) => console.log("DB error", e),
 );
-
-app.use(errorLogger);
-app.use(errors());
-app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
