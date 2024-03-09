@@ -125,7 +125,7 @@ const createUser = (req, res, next) => {
       });
     })
     .then((user) => res.status(201).send(user))
-    // .then((user) => console.log("send response if successful"))
+    // .then((user) => console.log("send response if successful"))   vvvvvv
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
