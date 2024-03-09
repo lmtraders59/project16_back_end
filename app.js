@@ -12,7 +12,7 @@ const {
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
-// app.use(express.json())
+
 const { PORT = 3001 } = process.env;
 app.use(express.json());
 // app.use((req, res, next) => {
