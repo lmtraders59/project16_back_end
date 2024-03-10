@@ -115,17 +115,24 @@ const createUser = (req, res, next) => {
       console.log({ user });
       return bcrypt.hash(password, 10);
     })
-    .then((hash) => {
+    .then((hash) =>
       // create the user
       User.create({
         name,
         avatar,
         email,
         password: hash,
-      });
-    })
+      }),
+    )
+    // .then((item) =>
+    //   res.setHeader("Content-Type", "application/json").status(201).send({
+    //     name: item.name,
+    //     avatar: item.avatar,
+    //     email: item.email,
+    //   }),
+    // )
     .then((user) => res.status(201).send(user))
-    // .then((user) => console.log("send response if successful"))   
+    // .then((user) => console.log("send response if successful"))
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
