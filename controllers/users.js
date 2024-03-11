@@ -6,10 +6,7 @@ const { JWT_SECRET } = process.env;
 
 const User = require("../models/user");
 const UnauthorizedError = require("../utils/errors/unauthorizedError");
-
-// const unauthorizedError = new UnauthorizedError();
 const ConflictError = require("../utils/errors/conflictError");
-
 const BadRequestError = require("../utils/errors/badRequestError");
 
 const badRequestError = new BadRequestError();
@@ -131,7 +128,7 @@ const createUser = (req, res, next) => {
     //     email: item.email,
     //   }),
     // )
-    .then((user) => res.status(201).send(user))
+    
     // .then((user) => console.log("send response if successful"))
     .catch((err) => {
       console.error(err);
