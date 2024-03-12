@@ -141,10 +141,10 @@ const createUser = (req, res) => {
         email: item.email,
       }),
     )
-    // eslint-disable-next-line consistent-return
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
+        // next(new ConflictError("A user with the current email already exists"));
         res
           .status(conflictError.statusCode)
           .send({ message: "A user with the current email already exists" });
