@@ -116,7 +116,7 @@ const updateUser = (req, res, next) => {
 //     });
 // };
 
-const createUser = (req, res, next) => {
+const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
   User.findOne({ email })
@@ -141,16 +141,16 @@ const createUser = (req, res, next) => {
         email: item.email,
       }),
     )
+    // eslint-disable-next-line consistent-return
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
-        // next(new ConflictError("A user with the current email already exists"));
         res
           .status(conflictError.statusCode)
           .send({ message: "A user with the current email already exists" });
       }
       console.error(err);
-      if (err.name === "ValidationError") {
+      else if (err.name === "ValidationError") {
         res
           .status(badRequestError.statusCode)
           .send({ message: "Invalid data" });
