@@ -144,13 +144,10 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.code === 11000) {
-        // next(new ConflictError("A user with the current email already exists"));
         res
           .status(conflictError.statusCode)
           .send({ message: "A user with the current email already exists" });
-      }
-      console.error(err);
-      else if (err.name === "ValidationError") {
+      } else if (err.name === "ValidationError") {
         res
           .status(badRequestError.statusCode)
           .send({ message: "Invalid data" });
@@ -195,7 +192,8 @@ const login = (req, res) => {
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error(err);
       res
         .status(unauthorizedError.statusCode)
         .send({ message: "Incorrect email or password" });

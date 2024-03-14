@@ -22,7 +22,7 @@ app.use("/", mainRouter);
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
-  (r) => {
+  () => {
     console.log("connected to DB");
   },
   (e) => console.log("DB error", e),
