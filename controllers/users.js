@@ -143,10 +143,16 @@ const createUser = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.code === 11000) {
-        res
-          .status(conflictError.statusCode)
-          .send({ message: "A user with the current email already exists" });
+      // .then((user) => {
+        if (user) {
+          res.send({ message: "A user with the current email already exists" });
+        }
+        return bcrypt.hash(password, 10);
+      });
+      // if (err.code === 11000) {
+      //   res
+      //     .status(conflictError.statusCode)
+      //     .send({ message: "A user with the current email already exists" });
       } else if (err.name === "ValidationError") {
         res
           .status(badRequestError.statusCode)
