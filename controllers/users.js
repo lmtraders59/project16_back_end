@@ -103,7 +103,7 @@ const createUser = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.code === 409) {
+      if (err.statusCode === 409) {
         res
           .status(conflictError.statusCode)
           .send({ message: "A user with the current email already exists" });
