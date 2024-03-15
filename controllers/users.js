@@ -78,15 +78,12 @@ const createUser = (req, res) => {
   User.findOne({ email })
     .select("+password")
     .then((user) => {
-      // console.log({ user });
       if (user) {
-        return res
-          .status(conflictError.statusCode)
-          .send({ message: "A user with the current email already exists" });
+        const error = new Error("A user with the current email already exists");
+        error.statusCode = 409;
+        throw error;
       }
       return bcrypt.hash(password, 10);
-      // });
-      // return bcrypt.hash(password, 10);
     })
     .then((hash) =>
       // create the user
@@ -106,7 +103,7 @@ const createUser = (req, res) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.code === 11000) {
+      if (err.code === 409) {
         res
           .status(conflictError.statusCode)
           .send({ message: "A user with the current email already exists" });
