@@ -80,7 +80,9 @@ const createUser = (req, res) => {
     .then((user) => {
       // console.log({ user });
       if (user) {
-        res.send({ message: "A user with the current email already exists" });
+        return res
+          .status(conflictError.statusCode)
+          .send({ message: "A user with the current email already exists" });
       }
       return bcrypt.hash(password, 10);
       // });
