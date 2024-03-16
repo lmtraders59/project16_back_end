@@ -5,9 +5,9 @@ require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
 const User = require("../models/user");
-const UnauthorizedError = require("../utils/errors/unauthorizedError");
+// const UnauthorizedError = require("../utils/errors/unauthorizedError");
 
-const unauthorizedError = new UnauthorizedError();
+// const unauthorizedError = new UnauthorizedError();
 const ConflictError = require("../utils/errors/conflictError");
 
 const conflictError = new ConflictError();
@@ -75,6 +75,11 @@ const updateUser = (req, res, next) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
+  if (!email || !password) {
+    res.status(badRequestError.statusCode).send({ message: "Invalid data" });
+    return;
+  }
+
   User.findOne({ email })
     .select("+password")
     .then((user) => {
@@ -86,7 +91,6 @@ const createUser = (req, res) => {
       return bcrypt.hash(password, 10);
     })
     .then((hash) =>
-      // create the user
       User.create({
         name,
         avatar,
@@ -131,8 +135,10 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      // res
+      //   .status(unauthorizedError.statusCode)
       res
-        .status(unauthorizedError.statusCode)
+        .status(badRequestError.statusCode)
         .send({ message: "Incorrect email or password" });
     });
 };

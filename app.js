@@ -17,7 +17,7 @@ app.use(express.json());
 // });
 app.post("/signin", login);
 app.post("/signup", createUser);
-
+// app.get("/:userId", getUser);
 app.use("/", mainRouter);
 
 mongoose.connect(
