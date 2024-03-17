@@ -1,4 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
+
 const BadRequestError = require("../utils/errors/badRequestError");
 
 const badRequestError = new BadRequestError();
@@ -8,7 +9,9 @@ const notFoundError = new NotFoundError();
 const ServerError = require("../utils/errors/serverError");
 
 const serverError = new ServerError();
+// const ForbiddenError = require("../utils/errors/forbiddenError");
 
+// const forbiddenError = new ForbiddenError();
 // create a new item
 
 const createItem = (req, res) => {

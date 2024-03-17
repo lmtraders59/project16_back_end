@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
 const { login, createUser } = require("./controllers/users");
+const { getItems } = require("./controllers/clothingItem");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // });
 app.post("/signin", login);
 app.post("/signup", createUser);
+app.get("/items", getItems);
 // app.get("/:userId", getUser);
 app.use("/", mainRouter);
 
