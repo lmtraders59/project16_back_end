@@ -7,9 +7,6 @@ const {
 } = process.env;
 
 const User = require("../models/user");
-// const UnauthorizedError = require("../utils/errors/unauthorizedError");
-
-// const unauthorizedError = new UnauthorizedError();
 const ConflictError = require("../utils/errors/conflictError");
 
 const conflictError = new ConflictError();
@@ -29,7 +26,6 @@ const getCurrentUser = (req, res, next) => {
   User.findById({ _id })
     .then((user) => {
       if (!user) {
-        // next(new NotFoundError("User not found"));
         res
           .status(notFoundError.statusCode)
           .send({ message: "User not found" });
@@ -39,7 +35,6 @@ const getCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        // next(new BadRequestError("Bad request, invalid ID"));
         res
           .status(badRequestError.statusCode)
           .send({ message: "Bad request, invalid ID" });
@@ -62,7 +57,6 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        // next(new BadRequestError("Bad request, invalid data"));
         res
           .status(badRequestError.statusCode)
           .send({ message: "Bad request, invalid data" });
@@ -137,8 +131,6 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      // res
-      //   .status(unauthorizedError.statusCode)
       res
         .status(badRequestError.statusCode)
         .send({ message: "Incorrect email or password" });

@@ -9,9 +9,7 @@ const notFoundError = new NotFoundError();
 const ServerError = require("../utils/errors/serverError");
 
 const serverError = new ServerError();
-// const ForbiddenError = require("../utils/errors/forbiddenError");
 
-// const forbiddenError = new ForbiddenError();
 // create a new item
 
 const createItem = (req, res) => {
@@ -55,7 +53,6 @@ const getItems = (req, res) => {
 
 const daleteItem = (req, res) => {
   const { itemId } = req.params;
-
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
