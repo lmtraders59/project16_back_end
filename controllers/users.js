@@ -16,6 +16,9 @@ const badRequestError = new BadRequestError();
 const NotFoundError = require("../utils/errors/notFoundError");
 
 const notFoundError = new NotFoundError();
+const UnauthorizedError = require("../utils/errors/unauthorizedError");
+
+const unauthorizedError = new UnauthorizedError();
 const ServerError = require("../utils/errors/serverError");
 
 const serverError = new ServerError();
@@ -135,9 +138,15 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res
-        .status(badRequestError.statusCode)
-        .send({ message: "Incorrect email or password" });
+      if (err.message === "Incorrect email or password") {
+        res
+          .status(unauthorizedError.statusCode)
+          .send({ message: "Incorrect email or password" });
+      } else {
+        res
+          .status(serverError)
+          .send({ message: "An error has occurred on the server" });
+      }
     });
 };
 
