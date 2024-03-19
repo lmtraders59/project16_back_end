@@ -6,6 +6,9 @@ const badRequestError = new BadRequestError();
 const NotFoundError = require("../utils/errors/notFoundError");
 
 const notFoundError = new NotFoundError();
+const ForbiddenError = require("../utils/errors/forbiddenError");
+
+const forbiddenError = new ForbiddenError();
 const ServerError = require("../utils/errors/serverError");
 
 const serverError = new ServerError();
@@ -51,32 +54,52 @@ const getItems = (req, res) => {
     });
 };
 
-// delete an item by id
+// ===========
+// const daleteItem = (req, res) => {
+//   const { itemId } = req.params;
+//   console.log(itemId);
+//   ClothingItem.findByIdAndDelete(itemId)
+//     .orFail()
+//     .then(() => res.status(200).send({ message: "Successfully deleted" }))
+//     .catch((err) => {
+//       console.error(err);
+//       if (err.name === "DocumentNotFoundError") {
+//         res
+//           .status(notFoundError.statusCode)
+//           .send({ message: "Item not found" });
+//       } else if (err.name === "CastError") {
+//         res
+//           .status(badRequestError.statusCode)
+//           .send({ message: "Invalid data" });
+//       } else {
+//         res
+//           .status(serverError)
+//           .send({ message: "An error has occurred on the server" });
+//       }
+//     });
+// };
+// =======================
 
-const daleteItem = (req, res) => {
-  // const { itemId } = req.params;
-  // console.log(itemId);
-  // ClothingItem.findByIdAndDelete(itemId)
-  //   .orFail()
-  //   .then(() => res.status(200).send({ message: "Successfully deleted" }))
+const deleteItem = (req, res) => {
   ClothingItem.findById(req.params.itemId)
     .then((item) => {
       if (!item) {
-        next(new NotFoundError("Item not found"));
-        return;
+        res
+          .status(notFoundError.statusCode)
+          .send({ message: "Item not found" });
       }
       if (item.owner.equals(req.user._id)) {
         item
           .deleteOne()
           .then(() => res.send({ ClothingItem: item }))
-          
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "DocumentNotFoundError") {
+      } else {
         res
-          .status(notFoundError.statusCode)
-          .send({ message: "Item not found" });
-      } else if (err.name === "CastError") {
+          .status(forbiddenError.statusCode)
+          .send({ message: "You are not authorized to delete this item" });
+      }
+    })
+    .catch((err) => {
+      if (err.name === "CastError") {
         res
           .status(badRequestError.statusCode)
           .send({ message: "Invalid data" });
@@ -151,7 +174,7 @@ const dislikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  daleteItem,
+  deleteItem,
   likeItem,
   dislikeItem,
 };
