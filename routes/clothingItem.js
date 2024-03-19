@@ -13,13 +13,13 @@ router.use(auth);
 router.post("/", createItem);
 
 // Delete
-router.delete("/:itemId", auth, daleteItem);
+router.delete("/:itemId", daleteItem);
 
 // Like
-router.put("/:itemId/likes", auth, likeItem);
+router.put("/:itemId/likes", likeItem);
 
 // Unlike
-router.delete("/:itemId/likes", auth, dislikeItem);
+router.delete("/:itemId/likes", dislikeItem);
 
 // Exports
 module.exports = router;

@@ -32,7 +32,9 @@ const createItem = (req, res) => {
           .status(badRequestError.statusCode)
           .send({ message: "Invalid data" });
       } else {
-        res.send({ message: "An error has occurred on the server" });
+        res
+          .status(serverError.statusCode)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
@@ -52,11 +54,22 @@ const getItems = (req, res) => {
 // delete an item by id
 
 const daleteItem = (req, res) => {
-  const { itemId } = req.params;
-  console.log(itemId);
-  ClothingItem.findByIdAndDelete(itemId)
-    .orFail()
-    .then(() => res.status(200).send({ message: "Successfully deleted" }))
+  // const { itemId } = req.params;
+  // console.log(itemId);
+  // ClothingItem.findByIdAndDelete(itemId)
+  //   .orFail()
+  //   .then(() => res.status(200).send({ message: "Successfully deleted" }))
+  ClothingItem.findById(req.params.itemId)
+    .then((item) => {
+      if (!item) {
+        next(new NotFoundError("Item not found"));
+        return;
+      }
+      if (item.owner.equals(req.user._id)) {
+        item
+          .deleteOne()
+          .then(() => res.send({ ClothingItem: item }))
+          
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {

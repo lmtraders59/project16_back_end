@@ -20,7 +20,7 @@ const ServerError = require("../utils/errors/serverError");
 
 const serverError = new ServerError();
 
-const getCurrentUser = (req, res, next) => {
+const getCurrentUser = (req, res) => {
   const { _id } = req.user;
 
   User.findById({ _id })
@@ -39,12 +39,14 @@ const getCurrentUser = (req, res, next) => {
           .status(badRequestError.statusCode)
           .send({ message: "Bad request, invalid ID" });
       } else {
-        next(err);
+        res
+          .status(serverError.statusCode)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
 
-const updateUser = (req, res, next) => {
+const updateUser = (req, res) => {
   const { name, avatar } = req.body;
   const { _id } = req.user;
   User.findByIdAndUpdate(
@@ -61,7 +63,9 @@ const updateUser = (req, res, next) => {
           .status(badRequestError.statusCode)
           .send({ message: "Bad request, invalid data" });
       } else {
-        next(err);
+        res
+          .status(serverError.statusCode)
+          .send({ message: "An error has occurred on the server" });
       }
     });
 };
