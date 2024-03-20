@@ -87,8 +87,7 @@ const deleteItem = (req, res) => {
         res
           .status(notFoundError.statusCode)
           .send({ message: "Item not found" });
-      }
-      if (item.owner.equals(req.user._id)) {
+      } else if (item.owner.equals(req.user._id)) {
         item.deleteOne().then(() => res.send({ ClothingItem: item }));
       } else {
         res
