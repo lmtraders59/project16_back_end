@@ -3,7 +3,7 @@ const auth = require("../middlewares/auth");
 
 const {
   createItem,
-  daleteItem,
+  deleteItem,
   likeItem,
   dislikeItem,
 } = require("../controllers/clothingItem");
@@ -13,7 +13,7 @@ router.use(auth);
 router.post("/", createItem);
 
 // Delete
-router.delete("/:itemId", daleteItem);
+router.delete("/:itemId", deleteItem);
 
 // Like
 router.put("/:itemId/likes", likeItem);

@@ -89,9 +89,7 @@ const deleteItem = (req, res) => {
           .send({ message: "Item not found" });
       }
       if (item.owner.equals(req.user._id)) {
-        item
-          .deleteOne()
-          .then(() => res.send({ ClothingItem: item }))
+        item.deleteOne().then(() => res.send({ ClothingItem: item }));
       } else {
         res
           .status(forbiddenError.statusCode)
