@@ -130,6 +130,10 @@ const createUser = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(badRequestError.statusCode).send({ message: "Invalid data" });
+    return;
+  }
   User.findUserByCredentials(email, password)
     .then((user) => {
       res.send({
@@ -150,7 +154,6 @@ const login = (req, res) => {
     });
 };
 
-// Module
 module.exports = {
   getCurrentUser,
   updateUser,
