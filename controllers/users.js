@@ -150,6 +150,7 @@ const login = (req, res) => {
     });
 };
 
+// Module
 module.exports = {
   getCurrentUser,
   updateUser,
