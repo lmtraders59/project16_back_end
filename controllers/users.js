@@ -120,7 +120,7 @@ const createUser = (req, res) => {
           .send({ message: "Invalid data" });
       } else {
         res
-          .status(serverError)
+          .status(serverError.statusCode)
           .send({ message: "An error has occurred on the server" });
       }
     });
@@ -144,7 +144,7 @@ const login = (req, res) => {
           .send({ message: "Incorrect email or password" });
       } else {
         res
-          .status(serverError)
+          .status(serverError.statusCode)
           .send({ message: "An error has occurred on the server" });
       }
     });

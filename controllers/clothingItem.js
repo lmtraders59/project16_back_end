@@ -49,7 +49,7 @@ const getItems = (req, res) => {
     .then((items) => res.status(200).send(items))
     .catch(() => {
       res
-        .status(serverError)
+        .status(serverError.statusCode)
         .send({ message: "An error has occurred on the server" });
     });
 };
@@ -102,7 +102,7 @@ const deleteItem = (req, res) => {
           .send({ message: "Invalid data" });
       } else {
         res
-          .status(serverError)
+          .status(serverError.statusCode)
           .send({ message: "An error has occurred on the server" });
       }
     });
@@ -132,7 +132,7 @@ const likeItem = (req, res) => {
           .send({ message: "Invalid data" });
       } else {
         res
-          .status(serverError)
+          .status(serverError.statusCode)
           .send({ message: "An error has occurred on the server" });
       }
     });
@@ -162,7 +162,7 @@ const dislikeItem = (req, res) => {
           .send({ message: "Invalid data" });
       } else {
         res
-          .status(serverError)
+          .status(serverError.statusCode)
           .send({ message: "An error has occurred on the server" });
       }
     });
