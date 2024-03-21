@@ -12,7 +12,6 @@ const unauthorizedError = new UnauthorizedError();
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    // return next(new UnauthorizedError("Authorization required"));
     return res
       .status(unauthorizedError.statusCode)
       .send({ message: "Authorization required" });
