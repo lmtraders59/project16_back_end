@@ -9,9 +9,9 @@ const NotFoundError = require("../utils/errors/notFoundError");
 const ForbiddenError = require("../utils/errors/forbiddenError");
 
 // const forbiddenError = new ForbiddenError();
-const ServerError = require("../utils/errors/serverError");
+// const ServerError = require("../utils/errors/serverError");
 
-const serverError = new ServerError();
+// const serverError = new ServerError();
 
 // create a new item
 
