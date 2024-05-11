@@ -13,13 +13,16 @@ const {
 } = require("./middlewares/validation");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
-
 const app = express();
 
 app.use(requestLogger);
 // app.use(routes);
 app.use(errorLogger);
+
+// celebrate error handler
 app.use(errors());
+
+// our centralized handler
 app.use(errorHandler);
 
 const { PORT = 3001 } = process.env;
