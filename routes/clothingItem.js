@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const auth = require("../middlewares/auth");
+
 const {
   createItemValidation,
   idValidation,
@@ -11,7 +11,6 @@ const {
   dislikeItem,
 } = require("../controllers/clothingItem");
 
-// router.use(auth);
 // Create
 router.post("/", createItemValidation, createItem);
 

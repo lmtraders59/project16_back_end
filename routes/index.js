@@ -3,7 +3,6 @@ const clothingItem = require("./clothingItem");
 const auth = require("../middlewares/auth");
 const NotFoundError = require("../utils/errors/notFoundError");
 
-// const notFoundError = new NotFoundError();
 const userRouter = require("./users");
 
 router.use(auth);

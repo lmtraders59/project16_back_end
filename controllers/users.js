@@ -8,20 +8,9 @@ const {
 
 const User = require("../models/user");
 const ConflictError = require("../utils/errors/conflictError");
-
-const conflictError = new ConflictError();
 const BadRequestError = require("../utils/errors/badRequestError");
-
-// const badRequestError = new BadRequestError();
 const NotFoundError = require("../utils/errors/notFoundError");
-
-// const notFoundError = new NotFoundError();
 const UnauthorizedError = require("../utils/errors/unauthorizedError");
-
-// const unauthorizedError = new UnauthorizedError();
-// const ServerError = require("../utils/errors/serverError");
-
-// const serverError = new ServerError();
 
 const getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
@@ -29,9 +18,6 @@ const getCurrentUser = (req, res, next) => {
   User.findById({ _id })
     .then((user) => {
       if (!user) {
-        // res
-        //   .status(notFoundError.statusCode)
-        //   .send({ message: "User not found" });
         next(new NotFoundError("User not found"));
       } else {
         res.send(user);
@@ -39,14 +25,8 @@ const getCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        // res
-        //   .status(badRequestError.statusCode)
-        //   .send({ message: "Bad request, invalid ID" });
         next(new BadRequestError("Bad request, invalid ID"));
       } else {
-        // res
-        //   .status(serverError.statusCode)
-        //   .send({ message: "An error has occurred on the server" });
         next(err);
       }
     });
@@ -65,14 +45,8 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        // res
-        //   .status(badRequestError.statusCode)
-        //   .send({ message: "Bad request, invalid data" });
         next(new BadRequestError("Bad request, invalid data"));
       } else {
-        // res
-        //   .status(serverError.statusCode)
-        //   .send({ message: "An error has occurred on the server" });
         next(err);
       }
     });
@@ -84,7 +58,6 @@ const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
 
   if (!email || !password) {
-    // res.status(badRequestError.statusCode).send({ message: "Invalid data" });
     next(new BadRequestError("Bad request, invalid data"));
     return;
   }
@@ -116,19 +89,11 @@ const createUser = (req, res, next) => {
     )
     .catch((err) => {
       console.error(err);
-      if (err.statusCode === 409) {
-        res
-          .status(conflictError.statusCode)
-          .send({ message: "A user with the current email already exists" });
+      if (err.name === ConflictError) {
+        next(new ConflictError("A user with the current email already exists"));
       } else if (err.name === "ValidationError") {
-        // res
-        //   .status(badRequestError.statusCode)
-        //   .send({ message: "Invalid data" });
         next(new BadRequestError("Bad request, invalid data"));
       } else {
-        // res
-        //   .status(serverError.statusCode)
-        //   .send({ message: "An error has occurred on the server" });
         next(err);
       }
     });
@@ -139,7 +104,6 @@ const createUser = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    // res.status(badRequestError.statusCode).send({ message: "Invalid data" });
     next(new BadRequestError("Bad request, invalid data"));
     return;
   }
@@ -152,14 +116,8 @@ const login = (req, res, next) => {
     .catch((err) => {
       console.error(err);
       if (err.message === "Incorrect email or password") {
-        // res
-        //   .status(unauthorizedError.statusCode)
-        //   .send({ message: "Incorrect email or password" });
         next(new UnauthorizedError("Incorrect email or password"));
       } else {
-        // res
-        //   .status(serverError.statusCode)
-        //   .send({ message: "An error has occurred on the server" });
         next(err);
       }
     });
