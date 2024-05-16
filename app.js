@@ -15,28 +15,26 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
 
-app.get('/crash-test', () => {
+app.get("/crash-test", () => {
   setTimeout(() => {
-    throw new Error('Server will crash now');
+    throw new Error("Server will crash now");
   }, 0);
 });
-
 
 const { PORT = 3001 } = process.env;
 app.use(express.json());
 app.use(cors());
-app.use(errorHandler);
-app.use(errors());
+app.use(requestLogger);
+
 app.post("/signin", loginValidation, login);
 app.post("/signup", createUserValidation, createUser);
 app.get("/items", getItems);
 
 app.use(errorLogger);
-
+app.use(errors());
+app.use(errorHandler);
 
 app.use("/", mainRouter);
-app.use(requestLogger);
-
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",

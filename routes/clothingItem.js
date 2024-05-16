@@ -11,18 +11,18 @@ const {
   dislikeItem,
 } = require("../controllers/clothingItem");
 
-router.use(auth);
+// router.use(auth);
 // Create
-router.post("/", auth, createItemValidation, createItem);
+router.post("/", createItemValidation, createItem);
 
 // Delete
-router.delete("/:itemId", auth, idValidation, deleteItem);
+router.delete("/:itemId", idValidation, deleteItem);
 
 // Like
-router.put("/:itemId/likes", auth, idValidation, likeItem);
+router.put("/:itemId/likes", idValidation, likeItem);
 
 // Unlike
-router.delete("/:itemId/likes", auth, idValidation, dislikeItem);
+router.delete("/:itemId/likes", idValidation, dislikeItem);
 
 // Exports
 module.exports = router;
