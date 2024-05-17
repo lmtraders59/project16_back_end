@@ -29,6 +29,7 @@ app.use(requestLogger);
 app.post("/signin", loginValidation, login);
 app.post("/signup", createUserValidation, createUser);
 app.get("/items", getItems);
+app.patch("/me, updateUserValidation, updateUser");
 
 app.use(errorLogger);
 app.use(errors());
