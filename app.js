@@ -29,13 +29,11 @@ app.use(requestLogger);
 app.post("/signin", loginValidation, login);
 app.post("/signup", createUserValidation, createUser);
 app.get("/items", getItems);
-app.patch("/me, updateUserValidation, updateUser");
 
+app.use("/", mainRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
-
-app.use("/", mainRouter);
 
 mongoose.connect(
   "mongodb://127.0.0.1:27017/wtwr_db",
