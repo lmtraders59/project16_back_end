@@ -15,11 +15,11 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
 
-app.get("/crash-test", () => {
-  setTimeout(() => {
-    throw new Error("Server will crash now");
-  }, 0);
-});
+// app.get("/crash-test", () => {
+//   setTimeout(() => {
+//     throw new Error("Server will crash now");
+//   }, 0);
+// });
 
 const { PORT = 3001 } = process.env;
 app.use(express.json());
